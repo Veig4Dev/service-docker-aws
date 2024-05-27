@@ -1,0 +1,12 @@
+{
+  "name": "local-receiver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "localReceiver.js",
+  "scripts": {
+    "start": "node localReceiver.js"
+  },
+  "dependencies": {
+    "ws": "^7.4.6"
+  }
+}

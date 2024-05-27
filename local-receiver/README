@@ -1,0 +1,65 @@
+# Passos para construir e rodar o container do local-receiver
+# Instruções para sistemas operacionais:
+
+# Windows
+# Instalar o Docker Desktop: Siga as instruções no link acima para instalar o Docker Desktop no Windows.
+# Abrir o Docker Desktop: Certifique-se de que está rodando.
+# Abrir o PowerShell ou o Prompt de Comando (cmd).
+
+# Ubuntu
+# Instalar Docker:
+
+# sudo apt update
+# sudo apt install -y docker.io
+# sudo systemctl start docker
+# sudo systemctl enable docker
+
+# Adicionar seu usuário ao grupo Docker (para evitar necessidade de usar sudo em todos os comandos Docker):
+
+# sudo usermod -aG docker $USER
+
+# Reiniciar seu terminal ou fazer logout/login para que a mudança tenha efeito.
+
+# Construir e rodar o container
+
+# Navegar até o diretório do local-receiver:
+
+# cd path/to/local-receiver
+
+# Construir a imagem Docker:
+
+# docker build -t local-receiver .
+
+# Rodar o container:
+
+# docker run -d -p 7788:7788 local-receiver
+
+# Isso irá iniciar o container do local-receiver e expor a porta 7788, permitindo a comunicação entre o servidor remoto e os dispositivos locais.
+
+# Verificando o funcionamento
+# Conexão ao WebSocket remoto: O local-receiver deve se conectar automaticamente ao servidor WebSocket remoto configurado no código.
+# Conexão aos dispositivos locais: Certifique-se de que os dispositivos locais estão configurados para se conectar à porta 7788 no host local (onde o local-receiver está rodando).
+# Logs e Depuração
+# Para visualizar os logs do container em execução, você pode usar:
+
+# docker logs <container_id>
+# Substitua <container_id> pelo ID do container que pode ser obtido com:
+
+# DOCKER PS ##
+
+# Problemas Comuns
+
+# Docker não instalado ou rodando
+
+# Certifique-se de que o Docker está instalado e rodando. No Windows, verifique o Docker Desktop. No Ubuntu, verifique o serviço Docker com:
+
+# sudo systemctl status docker
+
+# Portas Bloqueadas
+
+# Certifique-se de que a porta 7788 não está sendo usada por outro serviço. No Ubuntu, você pode verificar as portas usadas com:
+
+# sudo netstat -tulnp
+
+# Problemas de Permissão no Ubuntu
+# Se você encontrar problemas de permissão ao rodar comandos Docker no Ubuntu, tente usar sudo ou certifique-se de que seu usuário está no grupo Docker.

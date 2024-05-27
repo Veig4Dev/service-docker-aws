@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  http-server:
+    build: ./http-server
+    ports:
+      - "3000:3000"
+
+  websocket-server:
+    build: ./websocket-server
+    ports:
+      - "7788:7788"
+
+ 

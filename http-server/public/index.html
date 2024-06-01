@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebView Evo80 Interface</title>
+    <title>WebServer socket-http </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,20 +55,26 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #03532f;
+            background-color: #050147;
             color: #fff;
             transition: background-color 0.3s, transform 0.3s;
             width: 100%;
             margin-top: 10px;
         }
         button:hover {
-            background-color: #03532f;
+            background-color: #050147;
             transform: translateY(-2px);
+        }
+        .button-secondary {
+            background-color: #555;
+        }
+        .button-secondary:hover {
+            background-color: #333;
         }
         img {
             max-width: 100px;
             margin-bottom: 15px;
-            transform: scale(1.3); 
+            transform: scale(2); 
             transition: transform 0.3s;
         }
         .locked-option {
@@ -80,7 +86,7 @@
             border-radius: 5px;
         }
         .locked-option::after {
-            content: 'Bloqueado';
+            content: 'Blocked';
             position: absolute;
             top: 0;
             right: 0;
@@ -95,14 +101,14 @@
 <body>
     <!-- Login Container -->
     <div class="login-container" id="loginContainer">
-        <img src="/src/evoLogo.png" alt="Login Image">
-        <h2>WebServer Evo 80</h2>
+        <img src="/src/imgdocker.png" alt="Login Image">
+        <h2>WebServer socket-http</h2>
         <div class="form-group">
-            <label for="username">Usuário:</label>
+            <label for="username">User:</label>
             <input type="text" id="username" required>
         </div>
         <div class="form-group">
-            <label for="password">Senha:</label>
+            <label for="password">Password:</label>
             <input type="password" id="password" required>
         </div>
         <button id="loginButton">Login</button>
@@ -110,46 +116,49 @@
 
     <!-- Menu Container -->
     <div class="menu-container container" id="menuContainer">
-        <h2>Menu de comunicação</h2>
-        <img src="/src/evoLogo.png" alt="Menu Image">
-        <button id="dataHoraButton">Enviar Data e Hora</button>
-        <button id="funcButton">Enviar Funcionário</button>
-        <div class="locked-option">Opção Futura 1</div>
-        <div class="locked-option">Opção Futura 2</div>
-        <div class="locked-option">Opção Futura 3</div>
+        <h2>Command List </h2>
+        <img src="/src/imgdocker.png" alt="Menu Image">
+        <button id="dataHoraButton">Date Time</button>
+        <button id="funcButton">Json</button>
+        <div class="locked-option">Image</div>
+        <div class="locked-option">Text</div>
+        <div class="locked-option">User</div>
+        <button class="button-secondary" id="logoutButton">Logout</button>
+
     </div>
 
     <!-- Form Containers -->
     <div class="form-container container" id="timeFormContainer">
-        <h2>Enviar Data e Hora</h2>
+        <h2>Send Date/time</h2>
         <form id="timeForm">
             <div class="form-group">
                 <label for="datetime"></label>
                 <input type="datetime-local" id="datetime" name="datetime" required>
             </div>
-            <button type="submit">Enviar</button>
+            <button type="submit">Send</button>
         </form>
-        <button id="voltarMenuTimeButton">Voltar ao Menu</button>
+        <button id="voltarMenuTimeButton">Return to Command List</button>
     </div>
 
-    <div class="form-container container" id="funcFormContainer">
-        <h2>Enviar Funcionário</h2>
+    <div class="form-container container" id="jsonFormContainer">
+        <h2>Send Json</h2>
         <form id="funcForm">
             <div class="form-group">
-                <label for="matricula">Matrícula:</label>
+                <label for="matricula">id:</label>
                 <input type="text" id="matricula" name="matricula" required>
             </div>
             <div class="form-group">
-                <label for="nome">Nome:</label>
+                <label for="nome">json:</label>
                 <input type="text" id="nome" name="nome" required>
             </div>
-            <button type="submit">Enviar</button>
+            <button type="submit">Send</button>
         </form>
-        <button id="voltarMenuFuncButton">Voltar ao Menu</button>
+        <button id="voltarMenuFuncButton">Return to Command List</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const logoutButton = document.getElementById('logoutButton');
             const loginButton = document.getElementById('loginButton');
             loginButton.addEventListener('click', login);
 
@@ -160,7 +169,7 @@
 
             const funcButton = document.getElementById('funcButton');
             funcButton.addEventListener('click', function() {
-                showForm('funcFormContainer');
+                showForm('jsonFormContainer');
             });
 
             const voltarMenuTimeButton = document.getElementById('voltarMenuTimeButton');
@@ -170,22 +179,33 @@
             voltarMenuFuncButton.addEventListener('click', showMenu);
 
             const timeForm = document.getElementById('timeForm');
-            timeForm.addEventListener('submit', enviarData);
+            timeForm.addEventListener('submit', sendDate);
 
             const funcForm = document.getElementById('funcForm');
-            funcForm.addEventListener('submit', enviarFunc);
+            funcForm.addEventListener('submit', sendJson);
 
             const socket = new WebSocket('ws://localhost:7788');
+            //apontar para o servidor //
+         
+            logoutButton.addEventListener('click', () => {
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+
+                loginContainer.style.display = 'flex';
+                menuContainer.style.display = 'none';
+                timeFormContainer.style.display = 'none';
+                jsonFormContainer.style.display = 'none';
+            });
 
             function login() {
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
                 
-                if (username === 'master' && password === 'evo') {
+                if (username === 'root' && password === 'toor') {
                     document.getElementById('loginContainer').style.display = 'none';
                     document.getElementById('menuContainer').style.display = 'block';
                 } else {
-                    alert('Usuário ou senha inválidos');
+                    alert('User invalid');
                 }
             }
 
@@ -202,13 +222,13 @@
                 forms.forEach(form => form.style.display = 'none');
             }
 
-            function enviarData(event) {
+            function sendDate(event) {
                 event.preventDefault();
                 const datetime = document.getElementById('datetime').value;
                 const formattedDateTime = datetime.replace('T', ' ') + ':00';
 
                 const data = {
-                    cmd: 'settime',
+                    cmd:"hours",
                     cloudtime: formattedDateTime
                 };
 
@@ -216,19 +236,16 @@
                 console.log('Dados enviados ao servidor via WebSocket:', JSON.stringify(data));
             }
 
-            function enviarFunc(event) {
+            function sendJson(event) {
                 event.preventDefault();
-                const matricula = document.getElementById('matricula').value;
-                const nome = document.getElementById('nome').value;
-                const num = Number(matricula);
+                const json = document.getElementById('nome').value;
+                const id = document.getElementById('matricula').value;
+                const num = Number(id);
 
                 const data = {
-                    cmd: "setuserinfo",
-                    enrollid: num,
-                    name: nome, 
-                    backpnum: 10,
-                    admin: 0,
-                    record: 0
+                    cmd:"json",
+                    id: num,
+                    json: json, 
                 };
 
                 socket.send(JSON.stringify(data));
